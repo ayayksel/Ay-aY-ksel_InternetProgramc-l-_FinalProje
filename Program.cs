@@ -1,32 +1,87 @@
-namespace Bilisim.HelloMvc
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace Bilisim.EfApp
 {
-    public class Program
+    internal class Program
     {
-        public static void Main(string[] args)
+        static void Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
+            //var ctx = new OkulDbContext();
+            //try
+            //{
+            //    var ogr = new Ogrenci { Ad = "Ali", Soyad = "Veli" };
+            //    ctx.Ogrenciler.Add(ogr);
+            //    ctx.SaveChanges();               
+            //}
+            //catch (Exception)
+            //{               
+            //    Console.WriteLine("Bir hata oluştu!");
+            //}
+            //finally
+            //{
+            //    ctx.Dispose();
+            //}
 
-            // Add services to the container.
-            builder.Services.AddControllersWithViews();
 
-            var app = builder.Build();
+            //*****Insert örneği
+            //using (var ctx = new OkulDbContext())
+            //{
+            //    var ogr = new Ogrenci { Ad = "Ali", Soyad = "Veli" };
+            //    ctx.Ogrenciler.Add(ogr);
+            //    ctx.SaveChanges();
+            //}
 
-            // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
+            //*****Update örneği
+            //using (var ctx = new OkulDbContext())
+            //{
+            //    var ogr = ctx.Ogrenciler.Find(3);
+            //    if (ogr != null)
+            //    {
+            //        ogr.Soyad = "Demirci";
+            //        ctx.Entry(ogr).State = EntityState.Modified;
+            //        int sonuc = ctx.SaveChanges();
+            //        Console.WriteLine(sonuc > 0 ? "Başarılı" : "Başarısız!");
+            //    }
+            //}
+
+            //******Select Örneği
+            //using (var ctx = new OkulDbContext())
+            //{
+            //    var lst = ctx.Ogrenciler.ToList();
+            //    foreach (var item in lst)
+            //    {
+            //        Console.WriteLine($"Ad:{item.Ad} Soyad:{item.Soyad}");
+            //    }
+            //}
+
+            //****Ad bilgisine göre select
+            //using (var ctx = new OkulDbContext())
+            //{
+            //    var lst = ctx.Ogrenciler.Where(o => o.Soyad == "Demirci").ToList();
+            //    foreach (var item in lst)
+            //    {
+            //        Console.WriteLine($"Ad:{item.Ad} Soyad:{item.Soyad}");
+            //    }
+            //}
+
+            //*****Delete örneği********
+            using (var ctx = new OkulDbContext())
             {
-                app.UseExceptionHandler("/Home/Error");
+                var ogr = ctx.Ogrenciler.Find(2);
+                if (ogr != null)
+                {
+                    ctx.Ogrenciler.Remove(ogr);
+                    int sonuc = ctx.SaveChanges();
+                    Console.WriteLine(sonuc > 0 ? "Silme işlemi başarılı" : "İşlem Başarısız!");
+                }
+                else
+                {
+                    Console.WriteLine("Öğrenci bulunamadı!");
+                }
             }
-            app.UseStaticFiles();
-
-            app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
-
-            app.Run();
         }
     }
 }
+
+//Garbage Collector
+//using blokları içerisinde üretilen yönetilemeyen kaynaklar, using bloğu dışına çıkıldığı anda Dispose edilir.
